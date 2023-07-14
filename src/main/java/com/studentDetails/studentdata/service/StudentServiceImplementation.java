@@ -65,7 +65,25 @@ public class StudentServiceImplementation implements StudentService {
         student.setId(studentDto.getId());
         student.setFirstname(studentDto.getFirstname());
         student.setLastname(studentDto.getLastname());
+        List<Course> courses = studentDto.getCourses().stream()
+                .map(courseDto -> {
+                    Course course = new Course();
+                    course.setId(courseDto.getId());
+                    course.setCourse_name(courseDto.getCourse_name());
+                    course.setStaff_name(courseDto.getStaff_name());
+                    course.setStudent(student); // Set the student for the course
+                    return course;
+                })
+                .collect(Collectors.toList());
+        student.setCourses(courses);
         return student;
+    }
+    private Course convertToCourseEntity(CourseDto courseDto) {
+        Course course = new Course();
+        course.setId(courseDto.getId());
+        course.setCourse_name(courseDto.getCourse_name());
+        course.setStaff_name(courseDto.getStaff_name());
+        return course;
     }
 
     @Override

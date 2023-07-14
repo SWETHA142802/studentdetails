@@ -2,10 +2,11 @@ package com.studentDetails.studentdata.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table (name = "student_data", schema = "public")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,7 @@ public class Student {
     @Column(name = "lastname")
     private String lastname;
     @OneToMany(cascade=CascadeType.ALL, mappedBy="student",fetch = FetchType.EAGER)
-    private List<Course> courses;
+    private List<Course> courses=new ArrayList<>();;
 
     public Long getId() {
         return id;

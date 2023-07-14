@@ -1,11 +1,12 @@
 package com.studentDetails.studentdata.dto;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDto {
     private Long id;
     private String firstname;
     private String lastname;
-    private List<CourseDto> courses;
+    private List<CourseDto> courses = new ArrayList<>();
 
     public StudentDto() {
     }

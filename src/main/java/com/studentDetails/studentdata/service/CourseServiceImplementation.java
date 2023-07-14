@@ -1,8 +1,11 @@
 package com.studentDetails.studentdata.service;
 
 import com.studentDetails.studentdata.dto.CourseDto;
+import com.studentDetails.studentdata.dto.StudentDto;
 import com.studentDetails.studentdata.entity.Course;
+import com.studentDetails.studentdata.entity.Student;
 import com.studentDetails.studentdata.repository.CourseRepository;
+import com.studentDetails.studentdata.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class CourseServiceImplementation implements CourseService{
     private final CourseRepository courseRepository;
+    private final StudentRepository studentRepository;
 
-    public CourseServiceImplementation(CourseRepository courseRepository) {
+    public CourseServiceImplementation(CourseRepository courseRepository, StudentRepository studentRepository) {
         this.courseRepository = courseRepository;
+        this.studentRepository = studentRepository;
     }
 
 
@@ -30,6 +35,14 @@ public class CourseServiceImplementation implements CourseService{
         courseDto.setId(courses.getId());
         courseDto.setCourse_name(courses.getCourse_name());
         courseDto.setStaff_name(courses.getStaff_name());
+        Student student= courses.getStudent();
+        if (student != null) {
+            StudentDto studentDto = new StudentDto();
+            studentDto.setId(student.getId());
+            studentDto.setFirstname(student.getFirstname());
+            studentDto.setLastname(student.getLastname());
+
+        }
         return courseDto;
     }
 
@@ -38,10 +51,17 @@ public class CourseServiceImplementation implements CourseService{
         Optional<Course> course = courseRepository.findById(id);
         return course.map(this::convertToDto);
     }
-
     @Override
     public CourseDto createCourse(CourseDto courseDto) {
         Course course = convertToEntity(courseDto);
+
+        // Save the student if it's not already saved
+        Student student = course.getStudent();
+        if (student != null && student.getId() == null) {
+            student = studentRepository.save(student);
+            course.setStudent(student);
+        }
+
         course = courseRepository.save(course);
         return convertToDto(course);
     }
@@ -51,6 +71,8 @@ public class CourseServiceImplementation implements CourseService{
         course.setId(courseDto.getId());
         course.setCourse_name(courseDto.getCourse_name());
         course.setStaff_name(courseDto.getStaff_name());
+        Student student = courseDto.getStudent(); // Get the student from the courseDto
+        course.setStudent(student);
         return course;
     }
 

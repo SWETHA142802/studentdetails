@@ -23,7 +23,7 @@ public class StudentController {
         return studentService.findById(id);
     }
     @PostMapping
-    public StudentDto saveStudent(@RequestBody StudentDto studentDto){
+    public StudentDto createStudent(@RequestBody StudentDto studentDto){
         return studentService.createStudent(studentDto);
     }
     @PutMapping
