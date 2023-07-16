@@ -26,8 +26,8 @@ public class StudentController {
     public StudentDto createStudent(@RequestBody StudentDto studentDto){
         return studentService.createStudent(studentDto);
     }
-    @PutMapping
-    public StudentDto updateStudent(@RequestBody StudentDto studentDto){
+    @PutMapping("/{id}")
+    public StudentDto updateStudent(@PathVariable("id") Long id,@RequestBody StudentDto studentDto){
         return studentService.updateStudent(studentDto);
     }
     @DeleteMapping("/{id}")
